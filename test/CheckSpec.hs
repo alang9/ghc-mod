@@ -87,4 +87,8 @@ spec = do
         it "emits error with explicit options" $ do
             withDirectory_ "test/data/options-cradle" $ do
                 res <- runD $ checkSyntax ["src/Main2.hs"]
+#if __GLASGOW_HASKELL__ >= 708
                 res `shouldBe` "src/Main2.hs:10:11:Couldn't match expected type \8216Int\8217 with actual type \8216a0 -> a0\8217\NULProbable cause: \8216id\8217 is applied to too few arguments\NULIn the second argument of \8216(+)\8217, namely \8216id\8217\NULIn the expression: 0 + id\n"
+#else
+                res `shouldBe` "src/Main2.hs:10:11:Couldn't match expected type `Int' with actual type `a0 -> a0'\NULIn the second argument of `(+)', namely `id'\NULIn the expression: 0 + id\NULIn an equation for `foo': foo = 0 + id\n"
+#endif
