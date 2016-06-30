@@ -3,6 +3,8 @@ module Main
   , foo
   ) where
 
+import Data.Tagged
+
 main :: IO ()
 main = return ()
 

@@ -14,8 +14,11 @@ spec = do
             mdls <- runD $ lines <$> modules False
             mdls `shouldContain` ["Data.Map"]
 
-    describe "modules" $ do
-        it "contains at least `Main'" $ do
+        it "contains at least `Data.Tagged'" $ bracketTagged $ do
+            mdls <- runD $ lines <$> modules False
+            mdls `shouldContain` ["Data.Tagged"]
+
+        it "does not contain `Data.Tagged'" $ do
             withDirectory_ "test/data/options-cradle" $ do
                 mdls <- runD $ lines <$> modules False
-                mdls `shouldContain` ["Data.Map"]
+                mdls `shouldNotContain` ["Data.Tagged"]
