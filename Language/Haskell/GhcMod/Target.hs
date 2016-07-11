@@ -466,7 +466,6 @@ loadTargets opts targetStrs = do
     let interp = needsHscInterpreted mg
     target <- hscTarget <$> getSessionDynFlags
     when (interp && target /= HscInterpreted) $ do
-      resetTargets targets
       _ <- setSessionDynFlags . setHscInterpreted =<< getSessionDynFlags
       gmLog GmInfo "loadTargets" $ text "Target needs interpeter, switching to LinkInMemory/HscInterpreted. Perfectly normal if anything is using TemplateHaskell, QuasiQuotes or PatternSynonyms."
 
@@ -491,11 +490,6 @@ loadTargets opts targetStrs = do
           relativeFilePath = makeRelative (cradleRootDir crdl) filePath
       return $ Target tid taoc src
     relativize tgt = return tgt
-
-    resetTargets targets' = do
-        setTargets []
-        void $ load LoadAllTargets
-        setTargets targets'
 
     showTargetId (Target (TargetModule s) _ _) = moduleNameString s
     showTargetId (Target (TargetFile s _) _ _) = s
