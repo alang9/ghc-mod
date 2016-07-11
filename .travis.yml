@@ -16,20 +16,20 @@ matrix:
   include:
     - env: CABALVER=1.24 GHCVER=7.6.3
       compiler: ": #GHC 7.6.3"
-      addons: {apt: {packages: [cabal-install-1.24,ghc-7.6.3,happy], sources: [hvr-ghc]}}
+      addons: {apt: {packages: [cabal-install-1.24,ghc-7.6.3,happy-1.19.4], sources: [hvr-ghc]}}
     - env: CABALVER=1.24 GHCVER=7.8.4
       compiler: ": #GHC 7.8.4"
-      addons: {apt: {packages: [cabal-install-1.24,ghc-7.8.4,happy], sources: [hvr-ghc]}}
+      addons: {apt: {packages: [cabal-install-1.24,ghc-7.8.4,happy-1.19.4], sources: [hvr-ghc]}}
     - env: CABALVER=1.24 GHCVER=7.10.2
       compiler: ": #GHC 7.10.2"
-      addons: {apt: {packages: [cabal-install-1.24,ghc-7.10.2,happy], sources: [hvr-ghc]}}
+      addons: {apt: {packages: [cabal-install-1.24,ghc-7.10.2,happy-1.19.4], sources: [hvr-ghc]}}
     - env: CABALVER=1.24 GHCVER=8.0.1
       compiler: ": #GHC 8.0.1"
-      addons: {apt: {packages: [cabal-install-1.24,ghc-8.0.1,happy], sources: [hvr-ghc]}}
+      addons: {apt: {packages: [cabal-install-1.24,ghc-8.0.1,happy-1.19.4], sources: [hvr-ghc]}}
 
 before_install:
  - unset CC
- - export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$PATH
+ - export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:/opt/happy/1.19.4/bin:$PATH
 
 install:
  - cabal --version
@@ -43,7 +43,8 @@ install:
    fi
  - travis_retry cabal update -v
  - sed -i 's/^jobs:/-- jobs:/' ${HOME}/.cabal/config
- - echo "constraints:QuickCheck==2.8.2" >> ${HOME}/.cabal/config
+ - echo "constraint:QuickCheck==2.8.2" >> ${HOME}/.cabal/config
+ - cat ${HOME}/.cabal/config
  - git clone --depth=1 https://github.com/DanielG/cabal-helper.git
  - cabal new-build ${TEST} ${BENCH} --dep
 
